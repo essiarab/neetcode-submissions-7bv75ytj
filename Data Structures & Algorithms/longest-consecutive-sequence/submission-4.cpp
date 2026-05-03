@@ -1,30 +1,21 @@
 class Solution {
 public:
-
-    string encode(vector<string>& strs) {
-        ostringstream oss;
-        for(string s:strs){
-            oss << s.length() << "#" << s;
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> seen;
+        int n=size(nums);
+        for(int i=0;i<n;i++){
+            seen.insert(nums[i]);
         }
-        return oss.str();
-    }
-
-    vector<string> decode(string s) {
-        if (s.empty()) return {};
-        vector<string> res;
-        string l;
-
-        for(int i=0;i<s.length();i++){
-            
-            if (s[i]!= '#'){
-                l += s[i];
+        int max_len=0;
+        for(int i=0;i<n;i++){
+            if(seen.find(nums[i]-1)==seen.end()) { //start of seq
+                int cur_len=0;
+                for(int k=nums[i];seen.count(k);k++){
+                    cur_len++;
+                    max_len=max(cur_len,max_len);
+                }
             }
-            else{
-                res.push_back(s.substr(i+1,stoi(l)));
-                i+=stoi(l);
-                l="";
-            } 
         }
-        return res;
+        return max_len;
     }
 };
